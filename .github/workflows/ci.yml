@@ -15,7 +15,7 @@ jobs:
         permissions:
           contents: read
           packages: write
-          
+
         defaults:
           run:
             working-directory: './docker'
@@ -41,7 +41,7 @@ jobs:
               file: ./docker/Dockerfile
               push: true
               tags: ghcr.io/adamjtaylor/htan-artist:latest
-              cache-from: type=local,src=/tmp/.buildx-cache
-              cache-to: type=local,dest=/tmp/.buildx-cache
+              cache-from: type=gha
+              cache-to: type=gha,mode=max
 
 
