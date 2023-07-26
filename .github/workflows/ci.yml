@@ -39,7 +39,5 @@ jobs:
               file: ./docker/Dockerfile
               push: true
               tags: ghcr.io/adamjtaylor/htan-artist:latest
-              cache-from: type=gha
-              cache-to: type=gha,mode=max
 
 
