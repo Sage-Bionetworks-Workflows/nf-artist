@@ -31,6 +31,20 @@ jobs:
               registry: ghcr.io
               username: ${{ github.actor }}
               password: ${{ secrets.GITHUB_TOKEN }}
+              
+          - name: Extract Docker metadata
+            id: metadata
+            uses: docker/metadata-action@v4
+            with:
+              images: |
+                ghcr.io/${{ github.repository }}
+              tags: |
+                type=semver,pattern={{version}}
+                type=semver,pattern={{major}}.{{minor}} 
+                type=semver,pattern={{major}}
+                type=ref,event=branch
+                type=sha
+                latest
 
           - name: Build and push to GHCR
             uses: docker/build-push-action@v4
@@ -38,6 +52,7 @@ jobs:
               context: ./docker
               file: ./docker/Dockerfile
               push: true
-              tags: ghcr.io/adamjtaylor/htan-artist:latest
+              tags: ${{ steps.metadata.outputs.tags }}
+              labels: ${{ steps.metadata.outputs.labels }}
 
 
