@@ -49,6 +49,7 @@ jobs:
           format: template
           template: '@/contrib/sarif.tpl'
           output: trivy-results.sarif
+          timeout: 20m
 
       # Show all detected issues.
       # Note this will show a lot more, including major un-fixed ones.
@@ -57,6 +58,7 @@ jobs:
         with:
           image-ref: ${{ steps.metadata.outputs.tags }}
           format: table
+          timeout: 20m
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
