@@ -4,7 +4,6 @@ on:
   push:
     branches:
      - 'dsl2'
-     - 'orca-249-push-to-ghcr'
     paths:
      - 'docker/**'
      - '.github/workflows/ci.yml'
@@ -13,8 +12,6 @@ env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  # Use `latest` as the tag to compare to if empty, assuming that it's already pushed
-  COMPARE_TAG: latest
 
 jobs:
       docker:
@@ -52,23 +49,11 @@ jobs:
                 type=sha
                 latest
 
-          #- name: Build and push to GHCR
-          #  uses: docker/build-push-action@v4
-          #  with:
-          #    context: ./docker
-          #    file: ./docker/Dockerfile
-          #    push: true
-          #    tags: ${{ steps.metadata.outputs.tags }}
-          #    labels: ${{ steps.metadata.outputs.labels }}
-
-          - name: Docker Scout
-            id: docker-scout
-            uses: docker/scout-action@v0.18.1
+          - name: Build and push to GHCR
+            uses: docker/build-push-action@v4
             with:
-              command: recommendations, compare
-              image: ${{ steps.metadata.outputs.tags }}
-              to-latest: true
-              ignore-unchanged: true
-              only-severities: critical,high
-              dockerhub-user: ${{ github.actor }}
-              dockerhub-password: ${{ secrets.GITHUB_TOKEN }}
+              context: ./docker
+              file: ./docker/Dockerfile
+              push: true
+              tags: ${{ steps.metadata.outputs.tags }}
+              labels: ${{ steps.metadata.outputs.labels }}
