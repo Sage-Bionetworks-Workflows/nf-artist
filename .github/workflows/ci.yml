@@ -52,20 +52,23 @@ jobs:
                 type=sha
                 latest
 
-          - name: Build and push to GHCR
-            uses: docker/build-push-action@v4
-            with:
-              context: ./docker
-              file: ./docker/Dockerfile
-              push: true
-              tags: ${{ steps.metadata.outputs.tags }}
-              labels: ${{ steps.metadata.outputs.labels }}
+          #- name: Build and push to GHCR
+          #  uses: docker/build-push-action@v4
+          #  with:
+          #    context: ./docker
+          #    file: ./docker/Dockerfile
+          #    push: true
+          #    tags: ${{ steps.metadata.outputs.tags }}
+          #    labels: ${{ steps.metadata.outputs.labels }}
 
           - name: Docker Scout
             id: docker-scout
             uses: docker/scout-action@v0.18.1
             with:
-              command: recommendations
+              command: recommendations, compare
               image: ${{ steps.metadata.outputs.tags }}
+              to-latest: true
               ignore-unchanged: true
               only-severities: critical,high
+              dockerhub-user: ${{ github.actor }}
+              dockerhub-password: ${{ secrets.GITHUB_TOKEN }}
