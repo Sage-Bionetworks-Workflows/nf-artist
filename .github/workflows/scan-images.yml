@@ -33,12 +33,12 @@ jobs:
         uses: docker/metadata-action@v4
         with:
             images: ${{ env.REGISTRY }}/${{ github.repository }}
+            tags: ${{ env.IMAGE_TAG }}
 
       - name: Pull the image
         run: |
           docker pull ${{ steps.metadata.outputs.tags }}
 
-      # Deliberately chosen master here to keep up-to-date.
       - name: Run Trivy vulnerability scanner for any major issues
         uses: aquasecurity/trivy-action@master
         with:
@@ -48,7 +48,7 @@ jobs:
           limit-severities-for-sarif: true
           format: template
           template: '@/contrib/sarif.tpl'
-          output: trivy-results-${{ steps.metadata.outputs.tags }}.sarif
+          output: trivy-results.sarif
 
       # Show all detected issues.
       # Note this will show a lot more, including major un-fixed ones.
@@ -61,13 +61,13 @@ jobs:
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: trivy-results-${{ steps.metadata.outputs.tags }}.sarif
+          sarif_file: trivy-results.sarif
           category: ${{ steps.metadata.outputs.tags }} image
           wait-for-processing: true
 
       - name: Detain results for debug if needed
         uses: actions/upload-artifact@v3
         with:
-          name: trivy-results-${{ steps.metadata.outputs.tags }}.sarif
-          path: trivy-results-${{ steps.metadata.outputs.tags }}.sarif
+          name: trivy-results.sarif
+          path: trivy-results.sarif
           if-no-files-found: error
