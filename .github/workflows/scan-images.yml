@@ -2,17 +2,16 @@ name: Scan image
 
 on:
     push:
-      branches:
-       - 'dsl2'
-       - 'orca-249-push-to-ghcr'
+      branches: [ "dsl2" ]
+    pull_request:
+      # The branches below must be a subset of the branches above
+      branches: [ "dsl2" ]
+    schedule:
+      - cron: '32 12 * * 2' # every tuesday at 12:32 UTC time
 
 env:
-    # Use docker.io for Docker Hub if empty
     REGISTRY: ghcr.io
-    IMAGE_NAME: sage-bionetowk
-    IMAGE_TAG: latest
-    # Use `latest` as the tag to compare to if empty, assuming that it's already pushed
-    COMPARE_TAG: latest
+    IMAGE_TAG: latest # scan just latest image
 
 jobs:
   trivy:
@@ -20,7 +19,6 @@ jobs:
     permissions:
         security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
     runs-on: ubuntu-latest
-    continue-on-error: true
 
     steps:
       - name: Login to GitHub Container Registry
@@ -50,16 +48,15 @@ jobs:
           limit-severities-for-sarif: true
           format: sarif
           output: trivy-results.sarif
-          timeout: 20m
+          timeout: 20m # trivy default timeout is 5m, we need longer for our image
 
       # Show all detected issues.
-      # Note this will show a lot more, including major un-fixed ones.
       - name: Run Trivy vulnerability scanner for local output
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ steps.metadata.outputs.tags }}
           format: table
-          timeout: 20m
+          timeout: 20m # trivy default timeout is 5m, we need longer for our image
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
