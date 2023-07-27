@@ -15,8 +15,10 @@ env:
     COMPARE_TAG: latest
 
 jobs:
-  trivy-edge:
+  trivy:
     name:  Run Trivy vulnerability scanner
+    permissions:
+        security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
     runs-on: ubuntu-latest
     continue-on-error: true
 
@@ -46,8 +48,7 @@ jobs:
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
           limit-severities-for-sarif: true
-          format: template
-          template: '@/contrib/sarif.tpl'
+          format: sarif
           output: trivy-results.sarif
           timeout: 20m
 
