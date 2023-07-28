@@ -3,7 +3,8 @@ name: ci
 on:
   push:
     branches:
-     - 'dsl2'
+     - 'main'
+     - 'orca-249-push-to-ghcr'
     paths:
      - 'docker/**'
      - '.github/workflows/ci.yml'
