@@ -1,6 +1,6 @@
 # HTAN Artist
 
-A NextFlow piepline to run image rendering process to generate resources for the [HTAN Portal](https://github.com/ncihtan/htan-portal).
+A NextFlow pipeline to run image rendering process to generate resources for the [HTAN Portal](https://github.com/ncihtan/htan-portal).
 
 - Converts bioformats files into OME-TIFF
 - Generates a `story.json` file using [Auto-Minerva](https://github.com/jmuhlich/auto-minerva)
@@ -10,12 +10,12 @@ A NextFlow piepline to run image rendering process to generate resources for the
 - `--he` assumes the channel is a brighfield microscopy image of H&E stained tissue and uses a fixed, unscaled `story.json` and a custom color legend
 - `--input` can be the path to an image (with `*` wildcards) or a csv manifest of cloud storage uris (one per line).
 
-A Docker container ([adamjtaylor/htan-artist](https://hub.docker.com/repository/docker/adamjtaylor/htan-artist)) is used to ensure reproducibility.
+A Docker container ([ghcr.io/sage-bionetworks-workflows/nf-artist](https://github.com/sage-bionetworks-workflows/nf-artist/pkgs/container/nf-artist)) is used to ensure reproducibility.
 
 ## Example usage
 
 ```
-nextflow run adamjtaylor/htan-artist --input_path <path-to-image> --outdir <output-directory> --all
+nextflow run ghcr.io/sage-bionetworks-workflows/nf-artist --input_path <path-to-image> --outdir <output-directory> --all
 ```
 
 ## Options
@@ -45,8 +45,8 @@ nextflow run adamjtaylor/htan-artist --input_path <path-to-image> --outdir <outp
 
 ### Test docker container
 
-`docker run -ti adamjtaylor/htan-artist`
+`docker run -ti ghcr.io/sage-bionetworks-workflows/nf-artist`
 
 ## Build docker container
 
-`docker build -t adamjtaylor/htan-artist docker/`
+`docker build -t ghcr.io/sage-bionetworks-workflows/nf-artist docker/`

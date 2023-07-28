@@ -2,10 +2,9 @@ name: Scan image
 
 on:
     push:
-      branches: [ "dsl2" ]
+      branches: [ "main" ]
     pull_request:
-      # The branches below must be a subset of the branches above
-      branches: [ "dsl2" ]
+      branches: [ "main" ]
     schedule:
       - cron: '32 12 * * 2' # every tuesday at 12:32 UTC time
 
