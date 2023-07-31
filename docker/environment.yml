@@ -16,7 +16,7 @@ dependencies:
   - scikit-image
   - pandas
   - pooch
-  - zarr>=2.11.0
+  - zarr
   - cython
   - pyinstaller
   - altair
@@ -29,6 +29,6 @@ dependencies:
   - raw2ometiff
   - pip
   - imagemagick
-  - tiffslide=2.2.0
+  - tiffslide=2.1.2
   - libvips
   - estimagic
