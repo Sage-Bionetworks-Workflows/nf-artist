@@ -4,7 +4,6 @@ on:
   push:
     branches:
      - 'main'
-     - 'orca-249-push-to-ghcr'
     paths:
      - 'docker/**'
      - '.github/workflows/ci.yml'
