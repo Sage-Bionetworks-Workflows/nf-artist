@@ -1,0 +1,21 @@
+{
+  "sample_info": {
+    "name": "",
+    "rotation": 0,
+    "text": "",
+    "pixels_per_micron": null
+  },
+  "defaults": [],
+  "groups": [
+    {
+      "label": "H&E",
+      "channels": [
+        { "color": "ffffff", "id": 0, "label": "H&E", "min": 0, "max": 1 }
+      ],
+      "render": [
+        { "color": "ffffff", "id": 0, "label": "H&E", "min": 0, "max": 1 }
+      ]
+    }
+  ],
+  "waypoints": []
+}

@@ -15,7 +15,6 @@ process render_pyramid {
   script:
     """
     python3  /minerva-author/src/save_exhibit_pyramid.py $image $story 'minerva'
-    cp /index.html minerva
     """
     
 }

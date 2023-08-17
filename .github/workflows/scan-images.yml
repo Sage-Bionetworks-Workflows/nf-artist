@@ -1,22 +1,22 @@
 name: Scan image
 
 on:
-    push:
-      branches: [ "main" ]
-    pull_request:
-      branches: [ "main" ]
-    schedule:
-      - cron: '32 12 * * 2' # every tuesday at 12:32 UTC time
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    - cron: "32 12 * * 2" # every tuesday at 12:32 UTC time
 
 env:
-    REGISTRY: ghcr.io
-    IMAGE_TAG: latest # scan just latest image
+  REGISTRY: ghcr.io
+  IMAGE_TAG: latest # scan just latest image
 
 jobs:
   trivy:
-    name:  Run Trivy vulnerability scanner
+    name: Run Trivy vulnerability scanner
     permissions:
-        security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
     runs-on: ubuntu-latest
 
     steps:
@@ -31,8 +31,8 @@ jobs:
         id: metadata
         uses: docker/metadata-action@v4
         with:
-            images: ${{ env.REGISTRY }}/${{ github.repository }}
-            tags: ${{ env.IMAGE_TAG }}
+          images: ${{ env.REGISTRY }}/${{ github.repository }}
+          tags: ${{ env.IMAGE_TAG }}
 
       - name: Pull the image
         run: |
@@ -43,7 +43,7 @@ jobs:
         with:
           image-ref: ${{ steps.metadata.outputs.tags }}
           ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
+          severity: "CRITICAL,HIGH"
           limit-severities-for-sarif: true
           format: sarif
           output: trivy-results.sarif

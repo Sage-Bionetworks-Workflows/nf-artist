@@ -13,7 +13,7 @@ process autominerva_story {
   script:
   if (meta.he) {
     """
-    wget -O story.json $params.heStory
+    cp $projectDir/bin/he_story.json story.json
     """
   } else {
     """
