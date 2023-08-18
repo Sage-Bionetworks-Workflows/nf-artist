@@ -11,6 +11,7 @@ params.level = -1
 params.dimred = "umap"
 params.colormap = "UCIE"
 params.n_components = 3
+params.he_story = 'bin/he_story.json'
 
 include { ARTIST } from './workflows/artist.nf'
 
