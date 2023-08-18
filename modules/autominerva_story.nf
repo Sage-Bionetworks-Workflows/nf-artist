@@ -13,7 +13,7 @@ process autominerva_story {
   script:
   if (meta.he) {
     """
-    cp he_story.json story.json
+    cp $workflow.projectDir/bin/he_story.json story.json
     """
   } else {
     """
