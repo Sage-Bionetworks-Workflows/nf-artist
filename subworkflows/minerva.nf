@@ -11,6 +11,6 @@ workflow MINERVA {
             it[0].minerva == true
         }
     .set {for_minerva }
-  autominerva_story(for_minerva, file(params.he_story)
+  autominerva_story(for_minerva, file(params.he_story))
   render_pyramid(autominerva_story.out)
 }
