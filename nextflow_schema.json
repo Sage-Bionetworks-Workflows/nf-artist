@@ -5,11 +5,12 @@
     "description": "Nextflow pipeline for generating Minerva stories and Miniature thumbnails from multiplexed tissue imaging datasets",
     "type": "object",
     "definitions": {
-        "parameters": {
-            "title": "Input options",
+        "input_output_options": {
+            "title": "Input/output options",
             "type": "object",
             "fa_icon": "fas fa-terminal",
-            "description": "Define HTAN Artist pipeline parameters.",
+            "description": "Define where the pipeline should find input data and save output data.",
+           "required": ["input", "outdir"],
             "properties": {
                 "input": {
                     "type": "string",
@@ -21,6 +22,42 @@
                     "type": "string",
                     "description": "Directory in which outputs are placed",
                     "default": "outputs"
+                }
+            }
+        },
+        "miniatue_options": {
+            "title": "Miniature options",
+            "type": "object",
+            "fa_icon": "fas fa-palette",
+            "description": "Define HTAN Artist pipeline parameters.",
+            "properties": {
+                "remove_bg": {
+                    "type": "boolean",
+                    "description": "Remove non-tissue background",
+                    "default": true
+                },
+                "level": {
+                    "type": "integer",
+                    "description": "The pyramid level used in thumbnauls, Default: -1 (smallest)",
+                    "default": -1
+                },
+                "dimred": {
+                    "type": "string",
+                    "description": "The dimensionality reduction method used",
+                    "default": "umap",
+                    "enum": ["umap", "tsne", "pca"]
+                },
+                "colormap": {
+                    "type": "string",
+                    "description": "The colormap used. Ensure colormap is compatiable with `n_components` selected ",
+                    "enum": ["UCIE", "LAB", "RGB", "BREMM", "SCHUMANN", "STEIGER", "TEULING2", "ZIEGLER","CUBEDIAGONAL"],
+                    "default": "UCIE"
+                },
+                "n_components": {
+                    "type": "integer",
+                    "description": "",
+                    "default": 3,
+                    "enum": [2,3]
                 }
             }
         }
