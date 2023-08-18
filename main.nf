@@ -11,7 +11,8 @@ params.level = -1
 params.dimred = "umap"
 params.colormap = "UCIE"
 params.n_components = 3
-params.he_story = 'bin/he_story.json'
+
+he_story = file( '$projectDir/bin/he_story.json', checkIfExists: true)
 
 include { ARTIST } from './workflows/artist.nf'
 
