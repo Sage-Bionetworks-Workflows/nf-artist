@@ -1,6 +1,7 @@
 process autominerva_story {
   input:
-      tuple val(meta), file(image) 
+      tuple val(meta), file(image)
+      file he_story from file(params.he_story)
   output:
       tuple val(meta), file(image), file('story.json')
   publishDir "$params.outdir",
@@ -13,7 +14,7 @@ process autominerva_story {
   script:
   if (meta.he) {
     """
-    cp $workflow.projectDir/bin/he_story.json story.json
+    cp $he_story story.json
     """
   } else {
     """
