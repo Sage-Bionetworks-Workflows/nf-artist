@@ -1,7 +1,7 @@
 process autominerva_story {
   input:
       tuple val(meta), file(image)
-      file(params.he_story) name: 'he_story.json'
+      file(params.he_story), name: 'he_story.json'
   output:
       tuple val(meta), file(image), file('story.json')
   publishDir "$params.outdir",
