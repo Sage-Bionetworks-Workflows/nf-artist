@@ -1,5 +1,6 @@
 include { autominerva_story } from "../modules/autominerva_story.nf"
 include { render_pyramid } from "../modules/render_pyramid.nf"
+include { he_story } from "../main.nf }
 
 workflow MINERVA {
   take:
