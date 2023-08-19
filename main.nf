@@ -12,7 +12,7 @@ params.dimred = "umap"
 params.colormap = "UCIE"
 params.n_components = 3
 
-he_story = file( '$projectDir/assets/he_story.json', checkIfExists: true)
+he_story = file( "${projectDir}/assets/he_story.json", checkIfExists: true)
 
 include { ARTIST } from './workflows/artist.nf'
 
