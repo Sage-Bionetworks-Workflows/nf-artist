@@ -1,7 +1,6 @@
 include { autominerva_story } from "../modules/autominerva_story.nf"
 include { render_pyramid } from "../modules/render_pyramid.nf"
 
-he_story_file = file( "assets/he_story.json", checkIfExists: true)
 
 workflow MINERVA {
   take:
@@ -12,7 +11,7 @@ workflow MINERVA {
     .filter {
       it[0].minerva && it[0].he
     }
-    .map { it -> [it[0], it[1], he_story_file] }
+    .map { it -> [it[0], it[1], file( "$projectDir/assets/he_story.json", checkIfExists: true)] }
     .set { he_story }
 
     converted
