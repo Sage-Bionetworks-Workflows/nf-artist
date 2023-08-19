@@ -1,4 +1,5 @@
 process render_pyramid {
+  label "process_medium"
   input:
       tuple val(meta), file(image), file (story)
   output:

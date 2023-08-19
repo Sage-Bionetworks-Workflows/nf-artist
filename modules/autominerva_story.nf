@@ -1,4 +1,5 @@
 process autominerva_story {
+  label "process_low"
   input:
       tuple val(meta), file(image)
   output:

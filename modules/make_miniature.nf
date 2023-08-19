@@ -1,5 +1,5 @@
 process make_miniature {
-  label "process_medium"
+  label "process_high"
   input:
       tuple val(meta), file(image) 
   output:
