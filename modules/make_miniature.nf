@@ -23,6 +23,8 @@ process make_miniature {
     slide = TiffSlide('$image')
 
     thumb = slide.get_thumbnail((512, 512))
+    if thumb.mode in ("RGBA", "P"): 
+      thumb = thumb.convert("RGB")
     thumb.save('thumbnail.jpg')
     """
   } else {
