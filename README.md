@@ -1,5 +1,13 @@
 # nf-artist
 
+[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A523.04.0-23aa62.svg)](https://www.nextflow.io/) 
+[![Launch on Nextflow Tower](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Nextflow%20Tower-%234256e7)](https://tower.nf/launch?pipeline=https://github.com/Sage-Bionetworks-Workflows/nf-artist) 
+[![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/) 
+![GitHub Actions CI Status](https://github.com/Sage-Bionetworks-Workflows/nf-artist/actions/workflows/ci.yml/badge.svg)
+![GitHub Actions Workflow Test Status](https://github.com/Sage-Bionetworks-Workflows/nf-artist/actions/workflows/nextflow.yml/badge.svg)
+![Container Scan Status](https://github.com/Sage-Bionetworks-Workflows/nf-artist/actions/workflows/scan-images.yml/badge.svg)
+
+
 A NextFlow pipeline to generate visualizations of multiplexed tissue imaging datasets. Initially developed for the [HTAN Data Portal](data.humantumoratlas.org).
 
 - Converts bioformats files into OME-TIFF
