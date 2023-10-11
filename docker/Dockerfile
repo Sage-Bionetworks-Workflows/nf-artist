@@ -55,7 +55,7 @@ RUN source /venv/bin/activate && \
     pip install opencv-python-headless \
     pip install synapseclient \
     pip install mantel \
-    pip install ome_types
+    pip install ome_types>=0.4.2
 
 ENV VIRTUAL_ENV=/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
