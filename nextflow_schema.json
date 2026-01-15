@@ -22,10 +22,15 @@
                     "type": "string",
                     "description": "Directory in which outputs are placed",
                     "default": "outputs"
+                },
+                "save_ometiff": {
+                    "type": "boolean",
+                    "description": "Save converted OME-TIFF files to output directory",
+                    "default": false
                 }
             }
         },
-        "miniatue_options": {
+        "miniature_options": {
             "title": "Miniature options",
             "type": "object",
             "fa_icon": "fas fa-palette",
@@ -38,7 +43,7 @@
                 },
                 "level": {
                     "type": "integer",
-                    "description": "The pyramid level used in thumbnauls, Default: -1 (smallest)",
+                    "description": "The pyramid level used in thumbnails, Default: -1 (smallest)",
                     "default": -1
                 },
                 "dimred": {
@@ -49,13 +54,13 @@
                 },
                 "colormap": {
                     "type": "string",
-                    "description": "The colormap used. Ensure colormap is compatiable with `n_components` selected ",
+                    "description": "The colormap used. Ensure colormap is compatible with `n_components` selected ",
                     "enum": ["UCIE", "LAB", "RGB", "BREMM", "SCHUMANN", "STEIGER", "TEULING2", "ZIEGLER","CUBEDIAGONAL"],
                     "default": "UCIE"
                 },
                 "n_components": {
                     "type": "integer",
-                    "description": "",
+                    "description": "Number of components for dimensionality reduction",
                     "default": 3,
                     "enum": [2,3]
                 }
@@ -64,7 +69,10 @@
     },
     "allOf": [
         {
-            "$ref": "#/definitions/parameters"
+            "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/miniature_options"
         }
     ]
 }
