@@ -38,7 +38,7 @@
                 },
                 "level": {
                     "type": "integer",
-                    "description": "The pyramid level used in thumbnauls, Default: -1 (smallest)",
+                    "description": "The pyramid level used in thumbnails, Default: -1 (smallest)",
                     "default": -1
                 },
                 "dimred": {
@@ -49,7 +49,7 @@
                 },
                 "colormap": {
                     "type": "string",
-                    "description": "The colormap used. Ensure colormap is compatiable with `n_components` selected ",
+                    "description": "The colormap used. Ensure colormap is compatible with `n_components` selected ",
                     "enum": ["UCIE", "LAB", "RGB", "BREMM", "SCHUMANN", "STEIGER", "TEULING2", "ZIEGLER","CUBEDIAGONAL"],
                     "default": "UCIE"
                 },
