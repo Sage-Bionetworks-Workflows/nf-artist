@@ -55,7 +55,7 @@
                 },
                 "n_components": {
                     "type": "integer",
-                    "description": "",
+                    "description": "Number of components for dimensionality reduction",
                     "default": 3,
                     "enum": [2,3]
                 },
