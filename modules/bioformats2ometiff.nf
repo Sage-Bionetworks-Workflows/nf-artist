@@ -3,6 +3,7 @@ process bioformats2ometiff {
   label "process_medium"
   publishDir "$params.outdir",
     enabled: params.save_ometiff,
+    pattern: "*.ome.tiff",
     saveAs: {filename -> "${meta.id}/ometiff/${filename}"}
   input:
       tuple val(meta), file(image) 
