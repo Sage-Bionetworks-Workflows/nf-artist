@@ -22,6 +22,11 @@
                     "type": "string",
                     "description": "Directory in which outputs are placed",
                     "default": "outputs"
+                },
+                "save_ometiff": {
+                    "type": "boolean",
+                    "description": "Save converted OME-TIFF files to output directory",
+                    "default": false
                 }
             }
         },
@@ -63,7 +68,11 @@
         }
     },
     "allOf": [
-        { "$ref": "#/definitions/input_output_options" },
-        { "$ref": "#/definitions/miniature_options" }
+        {
+            "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/miniature_options"
+        }
     ]
 }

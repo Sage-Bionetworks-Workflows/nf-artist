@@ -6,6 +6,7 @@ nextflow.enable.dsl=2
 if (params.input) { params.input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
 
 params.outdir = "outputs"
+params.save_ometiff = false
 params.remove_bg = true
 params.level = -1
 params.dimred = "umap"

@@ -5,6 +5,10 @@ process bioformats2ometiff {
       tuple val(meta), file(image) 
   output:
       tuple val(meta), file("${image.simpleName}.ome.tiff")
+  publishDir "$params.outdir",
+    enabled: params.save_ometiff,
+    pattern: "*.ome.tiff",
+    saveAs: {filename -> "${meta.id}/ometiff/${filename}"}
   stub:
   """
   touch raw_dir
