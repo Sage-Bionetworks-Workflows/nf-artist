@@ -30,7 +30,7 @@
                 }
             }
         },
-        "miniature_options": {
+        "miniatue_options": {
             "title": "Miniature options",
             "type": "object",
             "fa_icon": "fas fa-palette",
@@ -72,7 +72,7 @@
             "$ref": "#/definitions/input_output_options"
         },
         {
-            "$ref": "#/definitions/miniature_options"
+            "$ref": "#/definitions/miniatue_options"
         }
     ]
 }
