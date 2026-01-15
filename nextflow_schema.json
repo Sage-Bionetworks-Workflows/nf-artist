@@ -22,10 +22,15 @@
                     "type": "string",
                     "description": "Directory in which outputs are placed",
                     "default": "outputs"
+                },
+                "save_ometiff": {
+                    "type": "boolean",
+                    "description": "Save converted OME-TIFF files to output directory",
+                    "default": false
                 }
             }
         },
-        "miniatue_options": {
+        "miniature_options": {
             "title": "Miniature options",
             "type": "object",
             "fa_icon": "fas fa-palette",
@@ -64,7 +69,10 @@
     },
     "allOf": [
         {
-            "$ref": "#/definitions/parameters"
+            "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/miniature_options"
         }
     ]
 }

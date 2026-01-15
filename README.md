@@ -35,6 +35,8 @@ nextflow run Sage-Bionetworks-Workflows/nf-artist --input <path-to-samplesheet> 
 ├── outdir
 │   ├── <simpleName or id for first row of samplesheet>
 │   │   ├── thumbnail.jpeg
+│   │   ├── ometiff (optional, if --save_ometiff is true)
+│   │   │   ├── <image>.ome.tiff
 │   │   ├── minerva
 │   │   │   ├── index.html
 │   │   │   ├── exhibit.json
@@ -55,6 +57,8 @@ nextflow run Sage-Bionetworks-Workflows/nf-artist --input <path-to-samplesheet> 
 * **input**: Path to a CSV sample sheet. This parameter is required. (Type: String)
 
 * **outdir**: Specifies the directory where the output data should be saved. Default is "outputs". (Type: String)
+
+* **save_ometiff**: Setting this to true will save converted OME-TIFF files to the output directory in an `ometiff` subdirectory. Default is false. (Type: Boolean)
 
 #### Miniature Options:
 
