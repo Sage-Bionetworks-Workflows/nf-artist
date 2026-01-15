@@ -25,7 +25,7 @@
                 }
             }
         },
-        "miniatue_options": {
+        "miniature_options": {
             "title": "Miniature options",
             "type": "object",
             "fa_icon": "fas fa-palette",
@@ -58,13 +58,17 @@
                     "description": "",
                     "default": 3,
                     "enum": [2,3]
+                },
+                "synapseconfig": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to Synapse configuration file"
                 }
             }
         }
     },
     "allOf": [
-        {
-            "$ref": "#/definitions/parameters"
-        }
+        { "$ref": "#/definitions/input_output_options" },
+        { "$ref": "#/definitions/miniature_options" }
     ]
 }
