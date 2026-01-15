@@ -58,11 +58,6 @@
                     "description": "Number of components for dimensionality reduction",
                     "default": 3,
                     "enum": [2,3]
-                },
-                "synapseconfig": {
-                    "type": "string",
-                    "format": "file-path",
-                    "description": "Path to Synapse configuration file"
                 }
             }
         }
