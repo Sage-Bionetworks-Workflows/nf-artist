@@ -11,4 +11,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: nf-core/setup-nextflow@v1
-      - run: nextflow run ${GITHUB_WORKSPACE} -profile test
+      - run: nextflow run ${GITHUB_WORKSPACE} -profile test,docker
