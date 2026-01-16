@@ -17,15 +17,30 @@ process make_miniature {
     """
     #!/usr/bin/env python
 
-    from tiffslide import TiffSlide
-    import matplotlib.pyplot as plt
-    import os
+    import tifffile
+    from PIL import Image
 
-    slide = TiffSlide('$image')
-
-    thumb = slide.get_thumbnail((512, 512))
+    # Open the OME-TIFF file
+    with tifffile.TiffFile('$image') as tif:
+        # For pyramidal images, use the smallest level for efficiency
+        if len(tif.series) > 0 and len(tif.series[0].levels) > 1:
+            # Get the smallest pyramid level
+            level = tif.series[0].levels[-1]
+            img_array = level.asarray()
+        else:
+            # No pyramid, read the full resolution
+            img_array = tif.asarray()
+    
+    # Convert numpy array to PIL Image
+    thumb = Image.fromarray(img_array)
+    
+    # Create thumbnail (maintains aspect ratio)
+    thumb.thumbnail((512, 512))
+    
+    # Ensure RGB mode
     if thumb.mode in ("RGBA", "P"): 
       thumb = thumb.convert("RGB")
+    
     thumb.save('miniature.jpg')
     """
   } else {
