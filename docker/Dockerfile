@@ -51,11 +51,12 @@ RUN source /venv/bin/activate && \
     git clone https://github.com/adamjtaylor/auto-minerva.git -b minerva1point5 && \
     git clone https://github.com/labsyspharm/minerva-author.git -b v1.14.0 &&  \
     pip install git+https://github.com/labsyspharm/minerva-lib-python@master#egg=minerva-lib && \
-    pip install openslide-python && \
-    pip install opencv-python-headless \
-    pip install synapseclient \
-    pip install mantel \
-    pip install ome_types>=0.4.2
+    pip install \
+            openslide-python \
+            opencv-python-headless \
+            synapseclient \
+            mantel \
+            "ome_types>=0.4.2"
 
 ENV VIRTUAL_ENV=/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
