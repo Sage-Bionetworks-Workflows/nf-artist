@@ -21,16 +21,34 @@ process make_miniature {
     from PIL import Image
     import numpy as np
 
-    # Open the OME-TIFF file
+    # Open the OME-TIFF file and read the base (full resolution) image
+    # Let PIL handle the resizing via thumbnail() - it's more robust
     with tifffile.TiffFile('$image') as tif:
-        # For pyramidal images, use the smallest level for efficiency
-        if len(tif.series) > 0 and hasattr(tif.series[0], 'levels') and len(tif.series[0].levels) > 1:
-            # Get the smallest pyramid level
-            level = tif.series[0].levels[-1]
-            img_array = level.asarray()
+        # Always read from the base series (full resolution)
+        # Don't try to use pyramid levels as they may be too small or have odd shapes
+        if len(tif.series) > 0:
+            img_array = tif.series[0].asarray()
         else:
-            # No pyramid or single level, read the full resolution
             img_array = tif.asarray()
+    
+    # Handle array shape - squeeze out singleton dimensions
+    img_array = np.squeeze(img_array)
+    
+    # Ensure we have at least 2D array
+    if img_array.ndim < 2:
+        # After squeezing, if we end up with 1D, reshape to 2D
+        img_array = img_array.reshape(1, -1)
+    
+    # Handle different array shapes
+    # Expected shapes: (Y, X), (Y, X, 3), (Y, X, 4) for grayscale, RGB, or RGBA
+    if img_array.ndim > 3:
+        # If more than 3 dimensions after squeeze, take first slice
+        # This handles cases like (C, Y, X, S) -> take first channel
+        img_array = img_array[0]
+        img_array = np.squeeze(img_array)
+        # Check again after squeezing
+        if img_array.ndim < 2:
+            img_array = img_array.reshape(1, -1)
     
     # Ensure proper data type for PIL (uint8)
     if img_array.dtype != np.uint8:
@@ -50,6 +68,7 @@ process make_miniature {
     thumb = Image.fromarray(img_array)
     
     # Create thumbnail (maintains aspect ratio)
+    # PIL's thumbnail is efficient and handles large images well
     thumb.thumbnail((512, 512))
     
     # Ensure RGB mode
