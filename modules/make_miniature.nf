@@ -19,17 +19,26 @@ process make_miniature {
 
     import tifffile
     from PIL import Image
+    import numpy as np
 
     # Open the OME-TIFF file
     with tifffile.TiffFile('$image') as tif:
         # For pyramidal images, use the smallest level for efficiency
-        if len(tif.series) > 0 and len(tif.series[0].levels) > 1:
+        if len(tif.series) > 0 and hasattr(tif.series[0], 'levels') and len(tif.series[0].levels) > 1:
             # Get the smallest pyramid level
             level = tif.series[0].levels[-1]
             img_array = level.asarray()
         else:
-            # No pyramid, read the full resolution
+            # No pyramid or single level, read the full resolution
             img_array = tif.asarray()
+    
+    # Ensure proper data type for PIL (uint8)
+    if img_array.dtype != np.uint8:
+        # Scale to uint8 range if needed
+        if img_array.max() > 255:
+            img_array = ((img_array - img_array.min()) / (img_array.max() - img_array.min()) * 255).astype(np.uint8)
+        else:
+            img_array = img_array.astype(np.uint8)
     
     # Convert numpy array to PIL Image
     thumb = Image.fromarray(img_array)
@@ -38,7 +47,7 @@ process make_miniature {
     thumb.thumbnail((512, 512))
     
     # Ensure RGB mode
-    if thumb.mode in ("RGBA", "P"): 
+    if thumb.mode != "RGB": 
       thumb = thumb.convert("RGB")
     
     thumb.save('miniature.jpg')
