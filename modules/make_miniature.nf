@@ -35,8 +35,14 @@ process make_miniature {
     # Ensure proper data type for PIL (uint8)
     if img_array.dtype != np.uint8:
         # Scale to uint8 range if needed
-        if img_array.max() > 255:
-            img_array = ((img_array - img_array.min()) / (img_array.max() - img_array.min()) * 255).astype(np.uint8)
+        img_min = img_array.min()
+        img_max = img_array.max()
+        if img_max > 255:
+            # Avoid division by zero
+            if img_max > img_min:
+                img_array = ((img_array - img_min) / (img_max - img_min) * 255).astype(np.uint8)
+            else:
+                img_array = np.zeros_like(img_array, dtype=np.uint8)
         else:
             img_array = img_array.astype(np.uint8)
     
