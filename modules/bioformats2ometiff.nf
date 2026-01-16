@@ -15,8 +15,9 @@ process bioformats2ometiff {
   touch "${image.simpleName}.ome.tiff"
   """
   script:
+  def rgb_flag = meta.he ? '--rgb' : ''
   """
   bioformats2raw $image 'raw_dir'
-  raw2ometiff 'raw_dir' "${image.simpleName}.ome.tiff"
+  raw2ometiff ${rgb_flag} 'raw_dir' "${image.simpleName}.ome.tiff"
   """
 }

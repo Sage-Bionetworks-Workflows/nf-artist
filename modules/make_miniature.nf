@@ -17,16 +17,17 @@ process make_miniature {
     """
     #!/usr/bin/env python
 
-    from tiffslide import TiffSlide
-    import matplotlib.pyplot as plt
-    import os
+    import pyvips
 
-    slide = TiffSlide('$image')
-
-    thumb = slide.get_thumbnail((512, 512))
-    if thumb.mode in ("RGBA", "P"): 
-      thumb = thumb.convert("RGB")
-    thumb.save('miniature.jpg')
+    # Use pyvips for robust thumbnail generation from any whole slide format
+    # Supports SVS, OME-TIFF, and other formats efficiently
+    slide = pyvips.Image.new_from_file('$image', access='sequential')
+    
+    # Create thumbnail with max dimension of 512px
+    thumbnail = slide.thumbnail_image(512)
+    
+    # Save as JPEG
+    thumbnail.write_to_file('miniature.jpg')
     """
   } else {
     """
