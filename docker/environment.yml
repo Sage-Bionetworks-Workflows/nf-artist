@@ -32,3 +32,4 @@ dependencies:
   - tiffslide=2.1.2
   - libvips
   - estimagic
+  - pyvips
