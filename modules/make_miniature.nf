@@ -21,10 +21,10 @@ process make_miniature {
 
     # Use pyvips for robust thumbnail generation from any whole slide format
     # Supports SVS, OME-TIFF, and other formats efficiently
-    image = pyvips.Image.new_from_file('$image', access='sequential')
+    slide = pyvips.Image.new_from_file('$image', access='sequential')
     
     # Create thumbnail with max dimension of 512px
-    thumbnail = image.thumbnail_image(512)
+    thumbnail = slide.thumbnail_image(512)
     
     # Save as JPEG
     thumbnail.write_to_file('miniature.jpg')
