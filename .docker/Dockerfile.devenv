@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM openjdk:slim
+FROM eclipse-temurin:17.0.17_10-jdk-jammy
 
 RUN useradd -s /bin/bash -m vscode \
  && groupadd docker \
