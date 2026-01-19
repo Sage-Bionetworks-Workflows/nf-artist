@@ -1,0 +1,70 @@
+name: Docker Build Test
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+    paths:
+      - 'docker/**'
+      - '.github/workflows/build-test.yml'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          push: false
+          load: true
+          tags: nf-artist:pr-${{ github.event.pull_request.number }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Smoke Test - Verify Dependencies
+        run: |
+          docker run --rm nf-artist:pr-${{ github.event.pull_request.number }} \
+            python -c "
+import sys
+import numpy
+import zarr
+
+print(f'Python: {sys.version}')
+print(f'NumPy: {numpy.__version__}')
+print(f'Zarr: {zarr.__version__}')
+
+# Verify NumPy 2.x is installed
+assert numpy.__version__.startswith('2.'), f'Expected NumPy 2.x, got {numpy.__version__}'
+
+# Verify zarr v3 is installed
+assert zarr.__version__.startswith('3.'), f'Expected zarr 3.x, got {zarr.__version__}'
+
+# Test that zarr works with NumPy 2.x (no np.PINF errors)
+import numpy as np
+arr = zarr.array(np.random.random((10, 10)))
+print(f'✓ Successfully created zarr array with shape {arr.shape}')
+
+print('✓ All dependency checks passed!')
+"
+
+      - name: Import Test - Verify All Critical Packages
+        run: |
+          docker run --rm nf-artist:pr-${{ github.event.pull_request.number }} \
+            python -c "
+import openslide
+import cv2
+import synapseclient
+import ome_types
+print('✓ All critical packages imported successfully!')
+"
