@@ -6,7 +6,6 @@ channels:
   - bioconda
 dependencies:
   - numpy>=1.26.0
-  - zarr>=3.0.0
   - Pillow
   - flask
   - waitress
@@ -33,6 +32,7 @@ dependencies:
   - estimagic
   - pyvips
   - pip:
+      - zarr>=3.0.0
       - openslide-python
       - opencv-python-headless
       - synapseclient
