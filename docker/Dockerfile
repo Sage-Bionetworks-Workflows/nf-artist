@@ -7,6 +7,13 @@ FROM continuumio/miniconda3 AS build
 # File Author / Maintainer
 LABEL maintainer="Adam Taylor <adam.taylor@sagebase.org>"
 
+# Install build dependencies needed for pip packages with C extensions (e.g., minerva-lib)
+RUN apt-get update && apt-get install --yes --no-install-recommends \
+    gcc \
+    g++ \
+    make \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install the package as normal:
 COPY environment.yml .
 RUN conda env create -f environment.yml
