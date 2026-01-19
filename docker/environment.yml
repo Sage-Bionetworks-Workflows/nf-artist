@@ -29,6 +29,7 @@ dependencies:
   - imagemagick
   - tiffslide=2.1.2
   - libvips
+  - pyvips
   - estimagic
   - pyvips
   - pip:
