@@ -5,7 +5,7 @@ channels:
   - fastai
   - bioconda
 dependencies:
-  - numpy>=1.26.0
+  - numpy>=1.23.0,<2.0
   - Pillow
   - flask
   - waitress
@@ -32,9 +32,8 @@ dependencies:
   - estimagic
   - pyvips
   - pip:
-      - zarr>=3.0.0
       - openslide-python
-      - opencv-python-headless
+      - opencv-python-headless==4.9.0.80
       - synapseclient
       - mantel
       - "ome_types>=0.4.2"
