@@ -1,3 +1,4 @@
+# Conda environment for nf-artist with pinned dependencies
 name: artist
 channels:
   - conda-forge
@@ -6,6 +7,7 @@ channels:
   - bioconda
 dependencies:
   - numpy>=1.23.0,<2.0
+  - zarr=2.6.1
   - Pillow
   - flask
   - waitress
@@ -23,7 +25,7 @@ dependencies:
   - scikit-learn
   - colormath
   - h5py
-  - bioformats2raw=0.4.0
+  - bioformats2raw
   - raw2ometiff
   - pip
   - imagemagick
@@ -31,10 +33,4 @@ dependencies:
   - libvips
   - estimagic
   - pyvips
-  - pip:
-      - openslide-python
-      - opencv-python-headless==4.9.0.80
-      - synapseclient
-      - mantel
-      - "ome_types>=0.4.2"
-      - git+https://github.com/labsyspharm/minerva-lib-python@master#egg=minerva-lib
+  - pip

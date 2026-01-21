@@ -15,7 +15,15 @@ RUN apt-get update && apt-get install --yes --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install the package as normal:
-COPY environment.yml .
+COPY docker/environment.yml .
+
+# Clone and patch minerva-lib to fix ARM64 compilation (remove Intel-specific -march=haswell)
+RUN git clone https://github.com/labsyspharm/minerva-lib-python.git /tmp/minerva-lib && \
+    cd /tmp/minerva-lib && \
+    sed -i 's/-march=haswell/-march=native/g' setup.py && \
+    sed -i 's/-march=haswell/-march=native/g' setup.cfg || true
+
+# Install conda environment (minerva-lib will be installed from patched local copy)
 RUN conda env create -f environment.yml
 
 # Install conda-pack:
@@ -23,7 +31,7 @@ RUN conda install -c conda-forge conda-pack
 
 # Use conda-pack to create a standalone enviornment
 # in /venv:
-RUN conda-pack -n artist -o /tmp/env.tar --ignore-missing-files && \
+RUN conda-pack -n artist -o /tmp/env.tar && \
   mkdir /venv && cd /venv && tar xf /tmp/env.tar && \
   rm /tmp/env.tar
 
@@ -38,6 +46,7 @@ FROM debian:bullseye AS runtime
 
 # Copy /venv from the previous stage:
 COPY --from=build /venv /venv
+COPY --from=build /tmp/minerva-lib /tmp/minerva-lib
 
 SHELL ["/bin/bash", "-c"]
 
@@ -52,6 +61,26 @@ RUN apt-get update && apt-get install --yes --no-install-recommends \
     python3-dev \
     python3-pip \
     libblosc1
+
+# Install pip packages after conda-pack to avoid conflicts
+# Pin NumPy<2.0 to prevent automatic upgrade and maintain zarr 2.x compatibility
+# Explicitly remove and reinstall urllib3/requests/idna to avoid mixed version issues
+RUN source /venv/bin/activate && \
+    pip uninstall -y urllib3 requests idna || true && \
+    rm -rf /venv/lib/python3.12/site-packages/urllib3* \
+           /venv/lib/python3.12/site-packages/requests* \
+           /venv/lib/python3.12/site-packages/idna* && \
+    pip install --no-cache-dir \
+        "numpy>=1.23.0,<2.0" \
+        "urllib3>=1.21.1,<1.26" \
+        "requests==2.22.0" \
+        openslide-python \
+        "opencv-python-headless<4.10" \
+        mantel \
+        "ome_types>=0.4.2" \
+        /tmp/minerva-lib
+# Note: synapseclient omitted due to urllib3 1.25.x / Python 3.12 incompatibility
+# Install separately if needed: pip install synapseclient
 
 RUN source /venv/bin/activate && \
     git clone https://github.com/adamjtaylor/miniature.git -b v2 && \
