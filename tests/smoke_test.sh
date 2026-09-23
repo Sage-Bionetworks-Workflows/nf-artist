@@ -4,7 +4,6 @@
 set -euo pipefail
 
 REPO=${REPO:-/repo}
-IMAGE="$REPO/data/exemplar-001_small.tif"
 OUT=$(mktemp -d)
 
 echo "== Dependency versions"
@@ -39,6 +38,12 @@ import tiffslide
 import umap
 print("All packages imported")
 EOF
+
+echo "== bioformats2ometiff"
+# The pipeline converts to OME-TIFF before minerva-author, which only handles OME-TIFF
+bioformats2raw "$REPO/data/exemplar-001_small.tif" "$OUT/raw_dir"
+raw2ometiff "$OUT/raw_dir" "$OUT/exemplar.ome.tiff"
+IMAGE="$OUT/exemplar.ome.tiff"
 
 echo "== tifffile aszarr"
 python - "$IMAGE" <<'EOF'
