@@ -6,7 +6,8 @@ channels:
   - bioconda
 dependencies:
   - python=3.12
-  - numpy>=2
+  # numpy>=2.4 breaks optimagic imports (used by miniature via estimagic)
+  - numpy>=2,<2.4
   # zarr 3 breaks minerva-author (zarr.core.Array, group item assignment)
   - zarr>=2.18.3,<3
   - Pillow
