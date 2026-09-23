@@ -1,19 +1,17 @@
 process make_miniature {
-  tag {"$meta.id"}
+  tag "$meta.id"
   label "process_high"
-  input:
-      tuple val(meta), file(image) 
-  output:
-      tuple val(meta), file('miniature.jpg')
   publishDir "$params.outdir",
-    saveAs: {filename -> "${meta.id}/thumbnail.jpg"}
-  stub:
-  """
-  mkdir data
-  touch data/miniature.jpg
-  """
+    saveAs: { _filename -> "${meta.id}/thumbnail.jpg" }
+
+  input:
+      tuple val(meta), path(image)
+
+  output:
+      tuple val(meta), path('miniature.jpg')
+
   script:
-  if ( meta.he){
+  if (meta.he) {
     """
     #!/usr/bin/env python
 
@@ -38,4 +36,9 @@ process make_miniature {
       --n_components $params.n_components
     """
   }
+
+  stub:
+  """
+  touch miniature.jpg
+  """
 }

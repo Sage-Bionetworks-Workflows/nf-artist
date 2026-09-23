@@ -1,10 +1,6 @@
 #!/usr/bin/env nextflow
 
-// Enable dsl2
-nextflow.enable.dsl=2
-
-if (params.input) { params.input = file(params.input) } else { exit 1, 'Input samplesheet not specified!' }
-
+params.input = null
 params.outdir = "outputs"
 params.save_ometiff = false
 params.remove_bg = true
@@ -20,5 +16,8 @@ workflow NF_ARTIST {
 }
 
 workflow {
+  if (!params.input) {
+    error 'Input samplesheet not specified!'
+  }
   NF_ARTIST ()
 }
