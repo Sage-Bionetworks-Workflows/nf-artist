@@ -15,8 +15,9 @@ dependencies:
   - waitress
   - flask_cors
   - matplotlib
-  # tifffile>=2025.5.21 requires zarr 3 for aszarr()
-  - tifffile<2025.5.21
+  # tifffile>=2025.5.21 requires zarr 3 for aszarr(); 2025.x also drops
+  # TIFF.RESUNIT, which tiffslide 2.1.2 uses
+  - tifffile=2024.12.12
   - imagecodecs
   - scikit-image
   - pandas
