@@ -1,13 +1,12 @@
 name: Docker Build Test
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - 'docker/**'
-      - 'tests/**'
-      - '.github/workflows/build-test.yml'
+  workflow_call:
+    outputs:
+      image:
+        description: Tag of the built image, loadable from the nf-artist-image artifact
+        value: ${{ jobs.build-and-test.outputs.image }}
+  workflow_dispatch:
 
 jobs:
   build-and-test:
@@ -15,9 +14,10 @@ jobs:
     timeout-minutes: 60
 
     env:
-      IMAGE: nf-artist:pr-${{ github.event.pull_request.number }}
-      # main.nf predates the strict syntax parser (default since Nextflow 25.10)
-      NXF_SYNTAX_PARSER: v1
+      IMAGE: nf-artist:ci-${{ github.sha }}
+
+    outputs:
+      image: ${{ env.IMAGE }}
 
     steps:
       - name: Checkout code
@@ -39,9 +39,13 @@ jobs:
       - name: Smoke test
         run: docker run --rm -v "$GITHUB_WORKSPACE:/repo" -w /tmp "$IMAGE" bash /repo/tests/smoke_test.sh
 
-      - uses: nf-core/setup-nextflow@v1
+      - name: Save image
+        run: docker save "$IMAGE" | gzip > /tmp/nf-artist-image.tar.gz
 
-      - name: Run pipeline test profile with PR image
-        run: |
-          echo "process.container = '$IMAGE'" > pr-image.config
-          nextflow run ${GITHUB_WORKSPACE} -profile test -c pr-image.config
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nf-artist-image
+          path: /tmp/nf-artist-image.tar.gz
+          retention-days: 1
+          compression-level: 0
