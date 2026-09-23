@@ -16,6 +16,8 @@ jobs:
 
     env:
       IMAGE: nf-artist:pr-${{ github.event.pull_request.number }}
+      # main.nf predates the strict syntax parser (default since Nextflow 25.10)
+      NXF_SYNTAX_PARSER: v1
 
     steps:
       - name: Checkout code

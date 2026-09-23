@@ -8,6 +8,9 @@ on:
 jobs:
   nf-artist:
     runs-on: ubuntu-latest
+    env:
+      # main.nf predates the strict syntax parser (default since Nextflow 25.10)
+      NXF_SYNTAX_PARSER: v1
     steps:
       - uses: actions/checkout@v4
       - uses: nf-core/setup-nextflow@v1
