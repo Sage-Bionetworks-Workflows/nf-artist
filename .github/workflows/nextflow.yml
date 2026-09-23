@@ -6,9 +6,31 @@ on:
   workflow_dispatch:
 
 jobs:
+  build:
+    uses: ./.github/workflows/build-test.yml
+
   nf-artist:
+    needs: build
     runs-on: ubuntu-latest
+    env:
+      IMAGE: ${{ needs.build.outputs.image }}
+      # main.nf predates the strict syntax parser (default since Nextflow 25.10)
+      NXF_SYNTAX_PARSER: v1
     steps:
       - uses: actions/checkout@v4
+
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nf-artist-image
+          path: /tmp
+
+      - name: Load image
+        run: gunzip -c /tmp/nf-artist-image.tar.gz | docker load
+
       - uses: nf-core/setup-nextflow@v1
-      - run: nextflow run ${GITHUB_WORKSPACE} -profile test
+
+      - name: Run pipeline test profile with the built image
+        run: |
+          echo "process.container = '$IMAGE'" > ci-image.config
+          nextflow run ${GITHUB_WORKSPACE} -profile test -c ci-image.config
