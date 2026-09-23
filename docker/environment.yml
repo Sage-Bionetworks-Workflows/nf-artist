@@ -5,13 +5,17 @@ channels:
   - fastai
   - bioconda
 dependencies:
-  - numpy>=1.26.0
+  - python=3.12
+  - numpy>=2
+  # zarr 3 breaks minerva-author (zarr.core.Array, group item assignment)
+  - zarr>=2.18.3,<3
   - Pillow
   - flask
   - waitress
   - flask_cors
   - matplotlib
-  - tifffile
+  # tifffile>=2025.5.21 requires zarr 3 for aszarr()
+  - tifffile<2025.5.21
   - imagecodecs
   - scikit-image
   - pandas
@@ -32,10 +36,8 @@ dependencies:
   - estimagic
   - pyvips
   - pip:
-      - zarr>=3.0.0
       - openslide-python
       - opencv-python-headless
       - synapseclient
       - mantel
       - "ome_types>=0.4.2"
-      - git+https://github.com/labsyspharm/minerva-lib-python@master#egg=minerva-lib

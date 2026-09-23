@@ -4,15 +4,18 @@ on:
   pull_request:
     branches:
       - main
-      - master
     paths:
       - 'docker/**'
+      - 'tests/**'
       - '.github/workflows/build-test.yml'
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
+
+    env:
+      IMAGE: nf-artist:pr-${{ github.event.pull_request.number }}
 
     steps:
       - name: Checkout code
@@ -24,47 +27,19 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./docker/Dockerfile
+          context: ./docker
           push: false
           load: true
-          tags: nf-artist:pr-${{ github.event.pull_request.number }}
+          tags: ${{ env.IMAGE }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Smoke Test - Verify Dependencies
+      - name: Smoke test
+        run: docker run --rm -v "$GITHUB_WORKSPACE:/repo" -w /tmp "$IMAGE" bash /repo/tests/smoke_test.sh
+
+      - uses: nf-core/setup-nextflow@v1
+
+      - name: Run pipeline test profile with PR image
         run: |
-          docker run --rm nf-artist:pr-${{ github.event.pull_request.number }} \
-            python -c "
-import sys
-import numpy
-import zarr
-
-print(f'Python: {sys.version}')
-print(f'NumPy: {numpy.__version__}')
-print(f'Zarr: {zarr.__version__}')
-
-# Verify NumPy 2.x is installed
-assert numpy.__version__.startswith('2.'), f'Expected NumPy 2.x, got {numpy.__version__}'
-
-# Verify zarr v3 is installed
-assert zarr.__version__.startswith('3.'), f'Expected zarr 3.x, got {zarr.__version__}'
-
-# Test that zarr works with NumPy 2.x (no np.PINF errors)
-import numpy as np
-arr = zarr.array(np.random.random((10, 10)))
-print(f'✓ Successfully created zarr array with shape {arr.shape}')
-
-print('✓ All dependency checks passed!')
-"
-
-      - name: Import Test - Verify All Critical Packages
-        run: |
-          docker run --rm nf-artist:pr-${{ github.event.pull_request.number }} \
-            python -c "
-import openslide
-import cv2
-import synapseclient
-import ome_types
-print('✓ All critical packages imported successfully!')
-"
+          echo "process.container = '$IMAGE'" > pr-image.config
+          nextflow run ${GITHUB_WORKSPACE} -profile test -c pr-image.config
