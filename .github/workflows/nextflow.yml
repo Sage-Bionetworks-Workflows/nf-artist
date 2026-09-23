@@ -14,8 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE: ${{ needs.build.outputs.image }}
-      # main.nf predates the strict syntax parser (default since Nextflow 25.10)
-      NXF_SYNTAX_PARSER: v1
     steps:
       - uses: actions/checkout@v4
 
@@ -33,4 +31,4 @@ jobs:
       - name: Run pipeline test profile with the built image
         run: |
           echo "process.container = '$IMAGE'" > ci-image.config
-          nextflow run ${GITHUB_WORKSPACE} -profile test -c ci-image.config
+          nextflow run ${GITHUB_WORKSPACE} -profile test -c conf/github_actions.config -c ci-image.config

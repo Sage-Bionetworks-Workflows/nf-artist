@@ -1,12 +1,20 @@
 process render_pyramid {
-  tag {"$meta.id"}
+  tag "$meta.id"
   label "process_medium"
+  publishDir "$params.outdir",
+    saveAs: { _filename -> "${meta.id}/minerva" }
+
   input:
-      tuple val(meta), file(image), file (story)
+      tuple val(meta), path(image), path(story)
+
   output:
       tuple val(meta), path('minerva')
-  publishDir "$params.outdir",
-    saveAs: {filename -> "${meta.id}/minerva"}
+
+  script:
+  """
+  python3  /minerva-author/src/save_exhibit_pyramid.py $image $story 'minerva'
+  """
+
   stub:
   """
   mkdir minerva
@@ -14,9 +22,4 @@ process render_pyramid {
   touch minerva/author.json
   touch minerva/index.html
   """
-  script:
-    """
-    python3  /minerva-author/src/save_exhibit_pyramid.py $image $story 'minerva'
-    """
-    
 }

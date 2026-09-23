@@ -1,22 +1,19 @@
 include { bioformats2ometiff } from '../modules/bioformats2ometiff.nf'
 
 workflow CONVERT {
-    take: images
-    main:
+    take:
     images
-        .filter {
-            it[0].convert == true
-        }
-        .set {bioformats}
+
+    main:
+    bioformats = images.filter { meta, _image -> meta.convert }
 
     bioformats2ometiff(bioformats)
 
     images
-      .filter {
-         it[0].convert == false
-      }    
-      .mix (bioformats2ometiff.out)
-      .set {converted}
+        .filter { meta, _image -> !meta.convert }
+        .mix(bioformats2ometiff.out)
+        .set { converted }
 
-    emit: converted
+    emit:
+    converted
 }

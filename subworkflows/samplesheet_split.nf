@@ -1,15 +1,15 @@
 workflow SAMPLESHEET_SPLIT {
     take:
     samplesheet
+
     main:
-    Channel
+    channel
         .fromPath(samplesheet)
-        .splitCsv (header:true, sep:',' )
+        .splitCsv(header: true, sep: ',')
         // Make meta map from the samplesheet
-        .map { 
-            row -> 
+        .map { row ->
             def meta = [:]
-            if (row.id ) {
+            if (row.id) {
                 meta.id = row.id
             } else {
                 meta.id = file(row.image).simpleName
@@ -19,11 +19,11 @@ workflow SAMPLESHEET_SPLIT {
             meta.he = row.he.toBoolean()
             meta.miniature = row.miniature.toBoolean()
             meta.minerva = row.minerva.toBoolean()
-            image = file(row.image)
+            def image = file(row.image)
             [meta, image]
         }
-        .set {images }
-        
-    emit: 
+        .set { images }
+
+    emit:
     images
 }
